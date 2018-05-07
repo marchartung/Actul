@@ -1,0 +1,31 @@
+#!/bin/bash
+
+ACTUL_LIB_DIR=@ACTUL_LIB_DIR@
+
+LLVM_LIB_DIR=@LLVM_LIBRARY_DIR@
+LLVM_EXEC_DIR=@LLVM_BIN_DIR@
+LLVM_LINKER_LIBS="@LLVM_LIBS@"
+LLVM_SYSTEM_LIBS="@LLVM_SYSTEM_LIBS@"
+
+LINKER_FLAGS="-L$ACTUL_LIB_DIR -lactulRTL -L$LLVM_LIB_DIR $LLVM_LINKER_LIBS -lstdc++ $LLVM_SYSTEM_LIBS"
+
+PASSED_ARGS=""
+while test $# -gt 0
+do
+	TMP_ARG=$1
+    case "$1" in
+        -c) 
+        	LINKER_FLAGS=""
+            ;;
+    	--disable-actul) 
+    		LINKER_FLAGS=""
+    		unset TMP_ARG
+    		;;
+    esac
+    if [ -n "$TMP_ARG" ]; then
+		PASSED_ARGS="$PASSED_ARGS $TMP_ARG"
+	fi
+    shift
+done
+
+$LLVM_EXEC_DIR/lld $PASSED_ARGS $LINKER_FLAGS

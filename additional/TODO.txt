@@ -1,0 +1,29 @@
+Corrections:
+	! get rid of std calls i.e. tuple, pair, copy, random_engine list, unordered_map top prevent infinite recursions
+	! correct atomics (currently not yielding on reads, stores)
+	! deadlock detection and analysis
+	! main thread exit leads to test abort without checking if threads still running
+	- replace time dependent functions -> sleep, clock, gettimeofday, ...
+	
+
+New features:
+
+
+	- use epoch graph for minimal schedule testing -> mark in graph which epochs need to be permuted
+		-> additional enables to run threads deterministically in parallel
+	- make runtime thread safe
+	
+	- dump traces to file
+	- enable replays from program start
+	- enable proper parallel execution
+		- random -> generate multiple tests for data race classification
+		- parallel search for systematic schedule space exploration
+	 ensure safe access of SHM-Container (main process simultaneously reads, while worker writes) 
+	
+Further new features:
+
+	- test distribution over distributed cores
+		- possible systematic distribution
+		- random distribution over data races ?!?
+		
+	- using mpi for single test run -> offload data race detection
